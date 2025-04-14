@@ -1,6 +1,7 @@
 from pathlib import Path
 import json
 from types import FunctionType
+from typing import Callable
 from config import config
 from pprint import pprint
 
@@ -10,30 +11,26 @@ def get_json_path(path: str = None) -> Path:
     else:
         return Path(path)
 
-def fetch_json_data(path: Path = get_json_path()) -> dict:
+def fetch_json_data(json_path_factory: Callable[[], Path] = get_json_path) -> dict:
+    path = json_path_factory()
     try:
+        if not path.exists():
+            return {"tasks": []}
+            
         data = json.loads(path.read_text(encoding='utf-8'))
-        return data
-    except FileNotFoundError:
-        print(f'Файл по пути: {path} не существует!')
-        data = {'Error': 'File not found'}
-        return data
-    except json.JSONDecodeError:
-        print('Файл не получается декодировать в json!')
-        data = {'Error': "File can't be decoded"}
-        return data
+        return {"tasks": data.get("tasks", [])}
+        
+    except (json.JSONDecodeError, FileNotFoundError):
+        return {"tasks": []}
     
-def create_json_file(path = get_json_path()) -> bool:
+def create_json_file(path = get_json_path) -> bool:
     try:
-        # Устанавливаем путь по умолчанию
-        # Проверяем существование файла
+        path = path()
         if path.exists():
             raise FileExistsError(f"Файл '{path}' уже существует")
             
-        # Создаем родительские директории, если их нет
         path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Создаем файл с базовой структурой
         template_data = {"tasks": []}
         path.write_text(
             json.dumps(template_data, indent=2, ensure_ascii=False), 
@@ -54,11 +51,10 @@ def create_json_file(path = get_json_path()) -> bool:
         return False
     
 
-def replace_old_data(new_data: list, updated_data: dict, json_path: FunctionType = get_json_path()) -> None:
-    updated_data['tasks'].clear()
-    for i in range(len(new_data)):
-            updated_data['tasks'].append(new_data[i])
-    json_path.write_text(json.dumps(updated_data, indent=2))
+def replace_old_data(new_data: list, json_path: FunctionType = get_json_path) -> None:
+    path = json_path()
+    data = {"tasks": new_data}
+    path.write_text(json.dumps(data, indent=2))
 
 def sort_by_id(data: list, appended_data: list) -> list:
     data.append(appended_data)

@@ -83,8 +83,4 @@ def main():
         print(err)
         
 if __name__ == "__main__":
-    # if get_json_path().exists() is False:
-    #     print('GOIDA')
-    #     create_json_file()
-    # else:
-        main()
+    main()

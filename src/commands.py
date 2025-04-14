@@ -26,74 +26,61 @@ def add(content: str,
     
 def update(task_id: int,
            content: str,
-           json_data: dict = fetch_json_data()) -> None:
+           json_data: dict = fetch_json_data) -> None:
+    data = json_data()
     updatedAt: datetime = datetime.now()
-    old_data = list(filter(lambda x: x['id'] == task_id, json_data['tasks']))
+    old_data = list(filter(lambda x: x['id'] == task_id, data['tasks']))
     if old_data == []:
         raise ValueError('Задачи с таким ID не существует')
-    data = {
+    updated_data = {
         "id": old_data[0]['id'],
         "content": content,
         "createdAt": old_data[0]['createdAt'],
         "updatedAt": str(updatedAt),
         "status": old_data[0]['status']
     }
-    new_data = list(filter(lambda x: x['id'] != task_id, json_data['tasks']))
-    sort_by_id(new_data, data)
-    replace_old_data(new_data, json_data)
+    new_data = list(filter(lambda x: x['id'] != task_id, data['tasks']))
+    sort_by_id(new_data, updated_data)
+    replace_old_data(new_data)
     
 def delete(task_id: int,
-           json_data: dict = fetch_json_data()) -> None:
-    replace_old_data(list(filter(lambda x: x['id'] != task_id, json_data['tasks'])), json_data)
+           json_data: dict = fetch_json_data) -> None:
+    data = json_data()
+    replace_old_data(list(filter(lambda x: x['id'] != task_id, data['tasks'])))
 
 def mark_in_progress(task_id: int,
-                     json_data: dict = fetch_json_data()):
-    old_data = list(filter(lambda x: x['id'] == task_id, json_data['tasks']))
+                     json_data: dict = fetch_json_data):
+    data = json_data()
+    old_data = list(filter(lambda x: x['id'] == task_id, data['tasks']))
     if old_data == []:
         raise ValueError('Задачи с таким ID не существует')
-    data = status_changer(old_data, 'in-progress')
-    new_data = list(filter(lambda x: x['id'] != task_id, json_data['tasks']))
-    sort_by_id(new_data, data)
-    replace_old_data(new_data, json_data)
+    changed_data = status_changer(old_data, 'in-progress')
+    new_data = list(filter(lambda x: x['id'] != task_id, data['tasks']))
+    sort_by_id(new_data, changed_data)
+    replace_old_data(new_data)
     
 def mark_done(task_id: int,
-              json_data: dict = fetch_json_data()):
-    old_data = list(filter(lambda x: x['id'] == task_id, json_data['tasks']))
+              json_data: dict = fetch_json_data):
+    data = json_data()
+    old_data = list(filter(lambda x: x['id'] == task_id, data['tasks']))
     if old_data == []:
         raise ValueError('Задачи с таким ID не существует')
-    data = status_changer(old_data, 'done')
-    new_data = list(filter(lambda x: x['id'] != task_id, json_data['tasks']))
-    sort_by_id(new_data, data)
-    replace_old_data(new_data, json_data)
+    changed_data = status_changer(old_data, 'done')
+    new_data = list(filter(lambda x: x['id'] != task_id, data['tasks']))
+    sort_by_id(new_data, changed_data)
+    replace_old_data(new_data)
 
 def mark_not_done(task_id: int,
-                  json_data: dict = fetch_json_data()):
-    old_data = list(filter(lambda x: x['id'] == task_id, json_data['tasks']))
+                  json_data: dict = fetch_json_data):
+    data = json_data()
+    old_data = list(filter(lambda x: x['id'] == task_id, data['tasks']))
     if old_data == []:
         raise ValueError('Задачи с таким ID не существует')
-    data = status_changer(old_data, 'no-done')
-    new_data = list(filter(lambda x: x['id'] != task_id, json_data['tasks']))
-    sort_by_id(new_data, data)
-    replace_old_data(new_data, json_data)
+    changed_data = status_changer(old_data, 'not-done')
+    new_data = list(filter(lambda x: x['id'] != task_id, data['tasks']))
+    sort_by_id(new_data, changed_data)
+    replace_old_data(new_data)
 
-def output_list(status: str, json_data: dict = fetch_json_data()):
-    return list(filter(lambda x: x['status'] == status, json_data['tasks']))
-
-
-if __name__ == '__main__':
-    # add(
-    #     'asdfasdfasdj;fal'
-    # )
-    # update(
-    #     7,
-    #     'Check append'
-    # )
-    # delete(
-    #     7
-    # )
-    # mark_in_progress(
-    #     1
-    # )
-    output_list(
-        'in-progress'
-    )
+def output_list(status: str, json_data: dict = fetch_json_data):
+    data = json_data()
+    return list(filter(lambda x: x['status'] == status, data['tasks']))
