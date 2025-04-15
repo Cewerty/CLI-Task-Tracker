@@ -88,4 +88,4 @@ def mark_not_done(task_id: int,
 
 def output_list(status: str, json_data: dict = fetch_json_data):
     data = json_data()
-    return format_output(list(filter(lambda x: x['status'] == status, data['tasks'])))
+    return format_output(list(filter(lambda x: x['status'] == status, data['tasks']))) if status != 'all' else format_output(data['tasks'])
