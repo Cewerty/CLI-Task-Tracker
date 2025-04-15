@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from utils import fetch_json_data, get_json_path, replace_old_data, sort_by_id, status_changer
+from .utils import fetch_json_data, get_json_path, replace_old_data, sort_by_id, status_changer
 from types import FunctionType
 
 def add(content: str,
@@ -8,7 +8,6 @@ def add(content: str,
         json_data: dict = fetch_json_data()) -> int:
     createdAt: datetime = datetime.now()
     updatedAt: datetime = datetime.now()
-    print(len(json_data['tasks']))
     if (len(json_data['tasks'])) > 0:
         id: int = json_data['tasks'][-1]['id']
     else:

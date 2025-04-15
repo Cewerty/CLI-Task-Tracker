@@ -2,8 +2,7 @@ from pathlib import Path
 import json
 from types import FunctionType
 from typing import Callable
-from config import config
-from pprint import pprint
+from .config import config
 
 def get_json_path(path: str = None) -> Path:
     if path is None:
@@ -70,8 +69,3 @@ def status_changer(data: list, new_status: str) -> dict:
         "status": new_status
     }
     return data_with_updated_status
-        
-
-if __name__ == '__main__':
-    pprint(fetch_json_data())
-    pprint(create_json_file())
