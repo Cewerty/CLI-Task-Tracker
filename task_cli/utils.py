@@ -69,3 +69,9 @@ def status_changer(data: list, new_status: str) -> dict:
         "status": new_status
     }
     return data_with_updated_status
+
+def format_output(tasks):
+    return "\n".join(
+        f"ID: {t['id']} | {t['status']} | {t['content']}"
+        for t in tasks
+)

@@ -24,11 +24,9 @@ def main():
     if not get_json_path().exists():
         create_json_file()
     
-    # Создаем основной парсер
     parser = argparse.ArgumentParser(description="Программа таск-менеджер")
     subparsers = parser.add_subparsers(dest='command', help='Доступные команды')
 
-    # Команда 1
     parser_add = subparsers.add_parser('add', help='Добавить таск в менеджер')
     parser_add.add_argument('task_content', type=str, help='Содержание таска')
     
@@ -49,16 +47,14 @@ def main():
     parser_mark_not_done.add_argument('id', type=int)
     
     parser_output_list = subparsers.add_parser('list')
-    parser_output_list.add_argument('status', type=str)
-    
-    # Команда 2
-    # parser_command2 = subparsers.add_parser('command2', help='Описание command2')
-    # parser_command2.add_argument('--arg2', type=str, help='Аргумент для command2')
+    parser_output_list.add_argument(
+    'status', 
+    choices=['done', 'not-done', 'in-progress', 'all'],
+    help="Status: done|not-done|in-progress|all"
+    )
 
-    # Разбираем аргументы
     args = parser.parse_args()
 
-    # Вызываем соответствующую логику для выбранной команды
     try:
         if args.command == 'add':
             id = add(args.task_content)
