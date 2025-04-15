@@ -16,9 +16,8 @@
 # Ensure to handle errors and edge cases gracefully.
 
 import argparse
-from commands import add, update, delete, mark_in_progress, mark_done, mark_not_done, output_list
-from utils import create_json_file, get_json_path
-
+from .commands import add, update, delete, mark_in_progress, mark_done, mark_not_done, output_list
+from .utils import create_json_file, get_json_path
 
 def main():
     
