@@ -51,7 +51,8 @@ Non-existent tasks
 
 Invalid statuses
 
-🛠 Development
+## 🛠 Development
+
 Clone the repository:
 
 ```bash
